@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - Vsimplifai</title>
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        .thank-you-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        .thank-you-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 600px;
+        }
+        .check-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #A855F7;
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div class="thank-you-container">
+        <div class="thank-you-card fade-in-up">
+            <div class="check-icon">✓</div>
+            <h1>Message Received</h1>
+            <p>Thank you for contacting Vsimplifai. We have received your message and will get back to you shortly.</p>
+            <br>
+            <a href="index.html" class="primary-button">Return to Home</a>
+        </div>
+    </div>
+</body>
+</html>

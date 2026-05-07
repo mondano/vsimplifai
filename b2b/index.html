@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vsimplifai - Stop Losing Deals to Slow Follow-Up</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Palette matched to Vsimplifai dark aesthetic */
+            --bg-body: #050505;
+            --bg-secondary: #0A0A0A;
+            --text-main: #FFFFFF;
+            --text-muted: #9CA3AF;
+            --accent-glow: rgba(99, 102, 241, 0.15);
+            --gradient-primary: linear-gradient(135deg, #6366F1 0%, #A855F7 50%, #EC4899 100%);
+            --gradient-text: linear-gradient(135deg, #818CF8 0%, #C084FC 100%);
+            
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(139, 92, 246, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, .logo, .stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--text-main);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #fff, #ccc);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .cta-button {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 9999px; /* Pill shape */
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #4f46e5, #9333ea);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s;
+            border-radius: 9999px;
+        }
+
+        .cta-button:hover::before {
+            opacity: 1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 120px 0;
+            position: relative;
+            /* overflow: hidden; Removed to allow glows to bleed nicely if needed, but safer with overflow hidden for mobile */
+            overflow: hidden; 
+        }
+
+        /* Ambient background glow */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 800px;
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.12), transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(60px);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .hero-kicker {
+            color: #A855F7;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            margin-bottom: 24px;
+            color: var(--text-main);
+            animation: fadeInUp 0.6s ease-out 0.1s backwards;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-text);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.6s ease-out 0.2s backwards;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-light);
+            animation: fadeInUp 0.6s ease-out 0.3s backwards;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 700;
+            background: var(--gradient-text);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-cta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            animation: fadeInUp 0.6s ease-out 0.4s backwards;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 100px 0;
+            background: var(--bg-body);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 80px;
+        }
+
+        .section-kicker {
+            color: #A855F7;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .section-header h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .problem-card {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-light);
+            border-radius: 20px; /* Modern rounding */
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        .problem-card:hover .problem-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(88, 28, 135, 0.5), rgba(124, 58, 237, 0.2));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 24px;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .problem-card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 120px 0;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+        
+        /* Subtle grid background */
+        .solution-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(var(--border-light) 1px, transparent 1px),
+            linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .solution-step {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 48px 32px;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-step::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .solution-step:hover::after {
+            opacity: 1;
+        }
+
+        .step-number {
+            font-size: 64px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin-bottom: 20px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .solution-step h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: white;
+            position: relative;
+        }
+
+        .solution-step p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            position: relative;
+        }
+
+        /* Results Section */
+        .results-section {
+            padding: 120px 0;
+            background: var(--bg-body);
+        }
+
+        .results-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            margin-top: 60px;
+        }
+
+        .metric-item {
+            border-left: 4px solid #8B5CF6;
+            padding-left: 32px;
+            margin-bottom: 40px;
+        }
+
+        .metric-number {
+            font-size: 56px;
+             font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .result-visual {
+            background: linear-gradient(145deg, #1e1b4b, #312e81);
+            padding: 60px;
+            border-radius: 24px;
+            color: white;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 20px 50px -20px rgba(79, 70, 229, 0.4);
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 48px;
+            background: var(--gradient-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-weight: 600;
+            transition: width 1s ease-out;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .bar-label {
+             color: #e2e8f0;
+             margin-bottom: 8px;
+        }
+
+        /* Case Study */
+        .case-study {
+            padding: 100px 0;
+            background: linear-gradient(rgba(5,5,5,0), rgba(15, 23, 42, 0.5));
+        }
+
+        .case-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 60px;
+            border-radius: 24px;
+            border: 1px solid var(--border-light);
+        }
+
+        .case-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .case-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4f46e5, #9333ea);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.3);
+        }
+
+        .case-company h3 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .case-industry {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .case-quote {
+            font-size: 24px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #E2E8F0;
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+
+        .case-results {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .case-result {
+            text-align: center;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+        }
+
+        .case-result-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #A855F7;
+            margin-bottom: 8px;
+        }
+        
+        .case-result-label {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 0;
+            background: linear-gradient(180deg, var(--bg-body) 0%, #111 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .cta-section::before {
+             content: '';
+             position: absolute;
+             top: 50%; left: 50%;
+             transform: translate(-50%, -50%);
+             width: 600px; height: 600px;
+             background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+             pointer-events: none;
+             z-index: 0;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: 56px;
+            margin-bottom: 24px;
+            background: linear-gradient(to bottom right, #fff, #94a3b8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 16px;
+            max-width: 500px;
+            margin: 40px auto 0;
+        }
+
+        .cta-form input {
+            flex: 1;
+            padding: 16px 24px;
+            border: 1px solid var(--border-light);
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .cta-form input:focus {
+            outline: none;
+            border-color: #8B5CF6;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        }
+
+        .cta-form button {
+            padding: 16px 32px;
+            font-size: 16px;
+            white-space: nowrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            text-align: center;
+            border-top: 1px solid var(--border-light);
+            font-size: 14px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 30px;
+                border-top: none;
+                margin-top: 40px;
+            }
+
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-showcase {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-section h2 {
+                font-size: 40px;
+            }
+            
+            .case-results {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-form {
+                flex-direction: column;
+            }
+            
+            .cta-form input, .cta-form button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo-container" style="display: flex; align-items: center; gap: 12px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: white;">
+                <img src="../assets/logo.png" alt="Vsimplifai Logo" style="height: 40px; width: auto;">
+                Vsimplifai
+            </div>
+            <div class="nav-links">
+                <a href="../index.html" style="color: white; opacity: 0.8;">For Individuals</a>
+                <a href="#problem">The Problem</a>
+                <a href="#solution">How It Works</a>
+                <a href="#results">Results</a>
+                <a href="#contact" class="cta-button">Book a Call</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-kicker">For B2B Service Founders</div>
+                <h1>Stop Losing Deals to Slow Follow-Up.<br><span>We Guarantee Instant Response.</span></h1>
+                <p class="hero-subtitle">We install AI agents that reply to leads in < 2 minutes, 24/7. <strong>If we don't increase your show-up rates in 90 days, we refund you 100%.</strong></p>
+                
+                <div class="hero-cta">
+                    <a href="#contact" class="cta-button">See How It Works</a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">&lt;2min</div>
+                        <div class="stat-label">Average response time</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Lead qualification</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Dropped conversations</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-kicker">The Revenue Leak</div>
+                <h2>Every Hour of Delay Costs You Deals</h2>
+                <p>Your competitors respond while you're in meetings. By the time you follow up, the lead has moved on.</p>
+            </div>
+
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Response Time Kills Deals</h3>
+                    <p>Research shows that responding within 5 minutes increases conversion by 400%. Most B2B service firms take 24+ hours to respond to inbound leads.</p>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>Manual Follow-Up Fails</h3>
+                    <p>Your team forgets to follow up. Leads slip through CRM cracks. You rely on spreadsheets and memory instead of systems that guarantee action.</p>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">💰</div>
+                    <h3>Lost Revenue Compounds</h3>
+                    <p>At €1–20M ARR, every missed lead costs €10K–€100K in lifetime value. Poor follow-up means you're leaving 15–30% of potential revenue on the table.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-kicker">The System</div>
+                <h2>We Build AI That Responds While You Sleep</h2>
+                <p>Custom automation that qualifies, nurtures, and books meetings—without human delay.</p>
+            </div>
+
+            <div class="solution-grid">
+                <div class="solution-step">
+                    <div class="step-number">01</div>
+                    <h3>Instant Response</h3>
+                    <p>AI responds to every inbound lead within 2 minutes, qualifying their needs and booking discovery calls automatically.</p>
+                </div>
+
+                <div class="solution-step">
+                    <div class="step-number">02</div>
+                    <h3>Smart Follow-Up</h3>
+                    <p>Multi-touch sequences that adapt based on engagement. Never let a warm lead go cold again.</p>
+                </div>
+
+                <div class="solution-step">
+                    <div class="step-number">03</div>
+                    <h3>Human Handoff</h3>
+                    <p>When a lead is qualified and ready, they're seamlessly handed to your team with full context and intent data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section" id="results">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-kicker">Proven Impact</div>
+                <h2>What Happens When You Fix Follow-Up</h2>
+            </div>
+
+            <div class="results-showcase">
+                <div class="result-metrics">
+                    <div class="metric-item">
+                        <div class="metric-number">3.2x</div>
+                        <div class="metric-label">More qualified meetings booked</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-number">€180K</div>
+                        <div class="metric-label">Average annual revenue recovered</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-number">40%</div>
+                        <div class="metric-label">Reduction in sales cycle length</div>
+                    </div>
+                </div>
+
+                <div class="result-visual">
+                    <h3 style="margin-bottom: 32px; font-size: 24px;">Lead-to-Meeting Conversion</h3>
+                    <div class="visual-chart">
+                        <div class="chart-bar">
+                            <div class="bar-label" style="width: 150px;">Manual Follow-Up</div>
+                            <div class="bar-fill" style="width: 40%;">8%</div>
+                        </div>
+                        <div style="height: 24px;"></div>
+                        <div class="chart-bar">
+                            <div class="bar-label" style="width: 150px;">With Vsimplifai</div>
+                            <div class="bar-fill" style="width: 100%;">26%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Study -->
+    <section class="case-study">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-kicker">Client Success</div>
+                <h2>Real Founders, Real Results</h2>
+            </div>
+
+            <div class="case-content">
+                <div class="case-header">
+                    <div class="case-logo">G</div>
+                    <div class="case-company">
+                        <h3>Guillaume — Cabinet de conseil</h3>
+                        <div class="case-industry">Conseil en transformation digitale • France</div>
+                    </div>
+                </div>
+
+                <div class="case-quote">
+                    "On perdait 3–4 opportunités par mois parce que les leads refroidissaient pendant nos rendez-vous clients. Le système Vsimplifai a tout changé : chaque lead reçoit une réponse intelligente instantanément."
+                </div>
+
+                <div class="case-results">
+                    <div class="case-result">
+                        <div class="case-result-number">3.2x</div>
+                        <div class="case-result-label">More meetings booked</div>
+                    </div>
+                    <div class="case-result">
+                        <div class="case-result-number">40%</div>
+                        <div class="case-result-label">Less time on follow-up</div>
+                    </div>
+                    <div class="case-result">
+                        <div class="case-result-number">4 weeks</div>
+                        <div class="case-result-label">To Full Deployment</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <div class="cta-content">
+                <div class="hero-kicker" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #FCA5A5;">⚠️ Limited Availability: We onboard 4 new partners per month</div>
+                <h2>Stop Burning Cash. Fix Your Follow-Up.</h2>
+                <p>We only onboard 4 new partners per month to ensure quality. If you qualify, we guarantee to deploy your system in 14 days.</p>
+                
+                <div class="cta-actions" style="margin-top: 32px;">
+                    <a href="https://cal.eu/gmvir111-gmail.com/15min" target="_blank" class="cta-button" style="text-decoration: none; display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; border-radius: 50px; font-weight: 600; font-family: 'Inter', sans-serif;">Book 15-Min Discovery Call</a>
+                </div>
+
+
+
+                <p style="margin-top: 16px; font-size: 14px; color: #64748B;">No sales pitch. Just a frank analysis of your lead response gaps.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Vsimplifai — Jolly Shah, Entrepreneur individuel<br>
+            SIRET: 999 396 211 00016<br>
+            12 chemin de Brondeau, 33370 Pompignac, France<br>
+            Contact: <a href="mailto:contact@vsimplifai.eu" style="color: #A855F7;">contact@vsimplifai.eu</a></p>
+            <p style="margin-top: 16px;">
+                <a href="https://vsimplifai.eu/mentions-legales" style="color: var(--text-muted); text-decoration: none;">Legal notice</a> ·
+                <a href="https://vsimplifai.eu/politique-confidentialite" style="color: var(--text-muted); text-decoration: none;">Privacy policy</a> ·
+                <a href="https://www.linkedin.com/in/jolly-shah-29a43288/" target="_blank" rel="noopener noreferrer" style="color: var(--text-muted); text-decoration: none;">LinkedIn</a>
+            </p>
+            <p style="margin-top: 16px;">&copy; 2026 Vsimplifai. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate bars on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Trigger reflow/animation logic via CSS if needed, 
+                    // but here we just ensure width is set if dynamic
+                    // Current CSS transitions width on load if set
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.bar-fill').forEach(bar => {
+            observer.observe(bar);
+        });
+    </script>
+</body>
+</html>
